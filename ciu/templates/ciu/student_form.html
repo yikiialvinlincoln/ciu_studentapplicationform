@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Form</title>
+    <style>
+        body, h1, button {
+            font-family: "Agency FB", Tahoma, Arial, Calibri, sans-serif;
+            color: darkgreen;
+            font-size: 20px;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+        }
+        .left-column {
+            flex: 1;
+        }
+        .form-column {
+            flex: 2;
+        }
+        .badge {
+            max-width: 400px;
+            max-height: 520px;
+            margin-right: 20px;
+        }
+        button[type="submit"] {
+            background-color: darkgreen;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px; /* Add margin to separate button from form */
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #006400; /* Darker green color on hover */
+        }
+    </style>
+</head>
+<body>
+    {% comment %} {% include 'messages.html' %} {% endcomment %}
+    <h1 style="text-align: left;">STUDENT APPLICATION FORM</h1>
+    <div class="container">
+        <div class="left-column">
+            <div class="left-column">
+                <img src="{% static 'images/image1.PNG' %}" alt="University Badge" class="badge" style="width: 100%; height: auto;">
+            </div>            
+        </div>
+        <div class="form-column">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" style="text-align: left;">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
