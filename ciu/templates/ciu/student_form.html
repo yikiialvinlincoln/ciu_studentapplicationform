@@ -12,49 +12,110 @@
         }
         .container {
             display: flex;
-            align-items: center;
         }
         .left-column {
             flex: 1;
         }
         .form-column {
             flex: 2;
+            background-color: white;
         }
         .badge {
             max-width: 400px;
-            max-height: 520px;
-            margin-right: 20px;
+            max-height: 580px;
+            margin-right: 20px;  
+            position: flexible;      
         }
         button[type="submit"] {
             background-color: darkgreen;
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
             border: none;
             border-radius: 5px;
-            margin-top: 20px; /* Add margin to separate button from form */
+            margin-top: 10px;
             cursor: pointer;
+            text-align: center !important;
+            position: relative;
         }
         button[type="submit"]:hover {
-            background-color: #006400; /* Darker green color on hover */
+            background-color: #006400;
+            color: grey;
+            text-align: center;
+        }
+        .is-invalid {
+            border-color: red;
+        }
+        .is-valid {
+            border-color: green;
+        }
+        .alert {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    {% comment %} {% include 'messages.html' %} {% endcomment %}
-    <h1 style="text-align: left;">STUDENT APPLICATION FORM</h1>
     <div class="container">
         <div class="left-column">
-            <div class="left-column">
-                <img src="{% static 'images/image1.PNG' %}" alt="University Badge" class="badge" style="width: 100%; height: auto;">
-            </div>            
+            <img src="{% static 'images/image1.PNG' %}" alt="University Badge" class="badge" style="width: 100%; height: 100%;">
         </div>
-        <div class="form-column">
-            <form method="post">
+    <div class="form-column">
+    <h1 style="font-size: 30px;"><b>STUDENT APPLICATION FORM</b></h1>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{% if message.tags == 'success' %}alert{% elif message.tags == 'error' %}error{% endif %}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+            <form method="post" id="studentForm">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" style="text-align: left;">Submit</button>
+                <button type="submit" style="text-align: center;">Submit</button>
             </form>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('studentForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+
+            form.addEventListener('submit', function(event) {
+                inputs.forEach(input => {
+                    if (!input.validity.valid) {
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    }
+                });
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (input.validity.valid) {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    } else {
+                        input.classList.remove('is-valid');
+                        input.classList.add('is-invalid');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
